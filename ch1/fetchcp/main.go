@@ -31,6 +31,7 @@ func main() {
 	fmt.Printf("GET - %v\n", resp.Status)
 	//!-exercise 1.9
 	_, err = io.Copy(os.Stdout, resp.Body)
+	resp.Body.Close()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "error copying to std out: %v\n", err)
 		os.Exit(1)
