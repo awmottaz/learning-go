@@ -1,4 +1,4 @@
-// Lissajous-mc creates a lissajous GIF in multicolor
+// Server1 is a minimal "echo" server.
 package main
 
 import (
@@ -7,10 +7,12 @@ import (
 	"image/color"
 	"image/gif"
 	"io"
+	"log"
 	"math"
 	"math/rand"
+	"net/http"
 	"os"
-	"time"
+	"strconv"
 )
 
 var palette = []color.Color{
@@ -25,17 +27,31 @@ var palette = []color.Color{
 }
 
 func main() {
-	rand.Seed(time.Now().UTC().UnixNano())
-	lissajous(os.Stdout)
+	http.HandleFunc("/", handler) // each request calls handler
+	log.Fatal(http.ListenAndServe("localhost:8000", nil))
 }
 
-func lissajous(out io.Writer) {
+// handler
+func handler(w http.ResponseWriter, r *http.Request) {
+	cycles := 5
+	if v := r.FormValue("cycles"); v != "" {
+		c, err := strconv.Atoi(v)
+		if err != nil {
+			log.Println(err)
+		} else {
+			cycles = c
+		}
+	}
+	lissajous(w, cycles)
+}
+
+func lissajous(out io.Writer, c int) {
+	cycles := float64(c) // number of complete x oscillations
 	const (
-		cycles  = 10     // number of complete x oscillations
 		res     = 0.0001 // angular resolution
-		size    = 250    // canvas size
-		nframes = 64     // number of animation frames
-		delay   = 8      // delay between frames in 10ms units
+		size    = 500    // canvas size
+		nframes = 128    // number of animation frames
+		delay   = 4      // delay between frames in 10ms units
 	)
 	relFreq := rand.Float64() * 3.0 // relative frequency of y oscillator
 	anim := gif.GIF{LoopCount: nframes}

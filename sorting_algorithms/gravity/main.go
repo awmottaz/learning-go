@@ -11,7 +11,6 @@ func main() {
 
 	for _, v := range data {
 		for i := 0; i < v; i++ {
-			// abacus[i]++
 			if len(abacus) <= i {
 				abacus = append(abacus, 1)
 			} else {
