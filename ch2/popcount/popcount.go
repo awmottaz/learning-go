@@ -27,9 +27,30 @@ func PopCount(x uint64) int {
 // Loop returns the population count (number of set bits) of x, using a
 // loop.
 func Loop(x uint64) int {
+	var result byte
+	for i := uint(0); i < 8; i++ {
+		result += pc[byte(x>>(i*8))]
+	}
+	return int(result)
+}
+
+// Argshift calculates the population count by shifting through the bits and
+// testing the right-most bit.
+func Argshift(x uint64) int {
 	var c uint64
 	for i := 0; i < 64; i++ {
 		c += (x >> uint(i)) & 1
 	}
 	return int(c)
+}
+
+// Clearbits calculates the population count by counting the number of nonzero
+// bits it can clear.
+func Clearbits(x uint64) int {
+	var count int
+	for x != 0 {
+		count++
+		x = x & (x - 1)
+	}
+	return count
 }
