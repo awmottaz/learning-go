@@ -37,19 +37,19 @@ func Test_finalSolution(t *testing.T) {
 			want: false,
 		},
 		{
-			name: "3",
+			name: "4",
 			args: args{[]int{-5, 8, 12, 5, -11}, 3},
 			want: true,
 		},
 		{
-			name: "3",
+			name: "5",
 			args: args{[]int{-5, 8, 12, 5, -11}, 1},
 			want: true,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := solutionOne(tt.args.list, tt.args.target); got != tt.want {
+			if got := finalSolution(tt.args.list, tt.args.target); got != tt.want {
 				t.Errorf("solutionOne() = %v, want %v", got, tt.want)
 			}
 		})
